@@ -1,0 +1,320 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Beamer Presentation
+% LaTeX Template
+% Version 2.0 (March 8, 2022)
+%
+% This template originates from:
+% https://www.LaTeXTemplates.com
+%
+% Author:
+% Vel (vel@latextemplates.com)
+%
+% License:
+% CC BY-NC-SA 4.0 (https://creativecommons.org/licenses/by-nc-sa/4.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[
+	11pt, % Set the default font size, options include: 8pt, 9pt, 10pt, 11pt, 12pt, 14pt, 17pt, 20pt
+	%t, % Uncomment to vertically align all slide content to the top of the slide, rather than the default centered
+	%aspectratio=169, % Uncomment to set the aspect ratio to a 16:9 ratio which matches the aspect ratio of 1080p and 4K screens and projectors
+]{beamer}
+
+\graphicspath{{images/}{./}} % Specifies where to look for included images (trailing slash required)
+
+\usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule for better rules in tables
+
+%----------------------------------------------------------------------------------------
+%	SELECT LAYOUT THEME
+%----------------------------------------------------------------------------------------
+
+% Beamer comes with a number of default layout themes which change the colors and layouts of slides. Below is a list of all themes available, uncomment each in turn to see what they look like.
+
+%\usetheme{default}
+%\usetheme{AnnArbor}
+%\usetheme{Antibes}
+%\usetheme{Bergen}
+%\usetheme{Berkeley}
+%\usetheme{Berlin}
+%\usetheme{Boadilla}
+%\usetheme{CambridgeUS}
+%\usetheme{Copenhagen}
+%\usetheme{Darmstadt}
+%\usetheme{Dresden}
+%\usetheme{Frankfurt}
+%\usetheme{Goettingen}
+%\usetheme{Hannover}
+%\usetheme{Ilmenau}
+%\usetheme{JuanLesPins}
+%\usetheme{Luebeck}
+%\usetheme{Madrid}
+%\usetheme{Malmoe}
+%\usetheme{Marburg}
+%\usetheme{Montpellier}
+%\usetheme{PaloAlto}
+%\usetheme{Pittsburgh}
+%\usetheme{Rochester}
+%\usetheme{Singapore}
+\usetheme{Szeged}
+%\usetheme{Warsaw}
+
+%----------------------------------------------------------------------------------------
+%	SELECT COLOR THEME
+%----------------------------------------------------------------------------------------
+
+% Beamer comes with a number of color themes that can be applied to any layout theme to change its colors. Uncomment each of these in turn to see how they change the colors of your selected layout theme.
+
+%\usecolortheme{albatross}
+\usecolortheme{beaver}
+%\usecolortheme{beetle}
+%\usecolortheme{crane}
+%\usecolortheme{dolphin}
+%\usecolortheme{dove}
+%\usecolortheme{fly}
+%\usecolortheme{lily}
+%\usecolortheme{monarca}
+%\usecolortheme{seagull}
+%\usecolortheme{seahorse}
+%\usecolortheme{spruce}
+%\usecolortheme{whale}
+%\usecolortheme{wolverine}
+
+%----------------------------------------------------------------------------------------
+%	SELECT FONT THEME & FONTS
+%----------------------------------------------------------------------------------------
+
+% Beamer comes with several font themes to easily change the fonts used in various parts of the presentation. Review the comments beside each one to decide if you would like to use it. Note that additional options can be specified for several of these font themes, consult the beamer documentation for more information.
+
+%\usefonttheme{default} % Typeset using the default sans serif font
+%\usefonttheme{serif} % Typeset using the default serif font (make sure a sans font isn't being set as the default font if you use this option!)
+%\usefonttheme{structurebold} % Typeset important structure text (titles, headlines, footlines, sidebar, etc) in bold
+%\usefonttheme{structureitalicserif} % Typeset important structure text (titles, headlines, footlines, sidebar, etc) in italic serif
+%\usefonttheme{structuresmallcapsserif} % Typeset important structure text (titles, headlines, footlines, sidebar, etc) in small caps serif
+
+%------------------------------------------------
+
+%\usepackage{mathptmx} % Use the Times font for serif text
+\usepackage{palatino} % Use the Palatino font for serif text
+
+%\usepackage{helvet} % Use the Helvetica font for sans serif text
+%\usepackage[default]{opensans} % Use the Open Sans font for sans serif text
+%\usepackage[default]{FiraSans} % Use the Fira Sans font for sans serif text
+%\usepackage[default]{lato} % Use the Lato font for sans serif text
+
+%----------------------------------------------------------------------------------------
+%	SELECT INNER THEME
+%----------------------------------------------------------------------------------------
+
+% Inner themes change the styling of internal slide elements, for example: bullet points, blocks, bibliography entries, title pages, theorems, etc. Uncomment each theme in turn to see what changes it makes to your presentation.
+
+\useinnertheme{default}
+%\useinnertheme{circles}
+%\useinnertheme{rectangles}
+%\useinnertheme{rounded}
+%\useinnertheme{inmargin}
+
+%----------------------------------------------------------------------------------------
+%	SELECT OUTER THEME
+%----------------------------------------------------------------------------------------
+
+% Outer themes change the overall layout of slides, such as: header and footer lines, sidebars and slide titles. Uncomment each theme in turn to see what changes it makes to your presentation.
+
+%\useoutertheme{default}
+%\useoutertheme{infolines}
+%\useoutertheme{miniframes}
+%\useoutertheme{smoothbars}
+%\useoutertheme{sidebar}
+%\useoutertheme{split}
+%\useoutertheme{shadow}
+%\useoutertheme{tree}
+%\useoutertheme{smoothtree}
+
+%\setbeamertemplate{footline} % Uncomment this line to remove the footer line in all slides
+%\setbeamertemplate{footline}[page number] % Uncomment this line to replace the footer line in all slides with a simple slide count
+
+%\setbeamertemplate{navigation symbols}{} % Uncomment this line to remove the navigation symbols from the bottom of all slides
+
+%----------------------------------------------------------------------------------------
+%	PRESENTATION INFORMATION
+%----------------------------------------------------------------------------------------
+
+\title[Descriptive Statistics]{Descriptive Statistics} % The short title in the optional parameter appears at the bottom of every slide, the full title in the main parameter is only on the title page
+
+%\subtitle{Optional Subtitle} % Presentation subtitle, remove this command if a subtitle isn't required
+
+\author[Steve Avsec]{Steve Avsec} % Presenter name(s), the optional parameter can contain a shortened version to appear on the bottom of every slide, while the main parameter will appear on the title slide
+
+\institute[IIT]{Illinois Institute of Technology} % Your institution, the optional parameter can be used for the institution shorthand and will appear on the bottom of every slide after author names, while the required parameter is used on the title slide and can include your email address or additional information on separate lines
+
+\date[\today]{\today} % Presentation date or conference/meeting name, the optional parameter can contain a shortened version to appear on the bottom of every slide, while the required parameter value is output to the title slide
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+%----------------------------------------------------------------------------------------
+%	TITLE SLIDE
+%----------------------------------------------------------------------------------------
+
+\begin{frame}
+	\titlepage % Output the title slide, automatically created using the text entered in the PRESENTATION INFORMATION block above
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+%	TABLE OF CONTENTS SLIDE
+%----------------------------------------------------------------------------------------
+
+% The table of contents outputs the sections and subsections that appear in your presentation, specified with the standard \section and \subsection commands. You may either display all sections and subsections on one slide with \tableofcontents, or display each section at a time on subsequent slides with \tableofcontents[pausesections]. The latter is useful if you want to step through each section and mention what you will discuss.
+
+\begin{frame}
+	\frametitle{Overview} % Slide title, remove this command for no title
+	
+	\tableofcontents % Output the table of contents (all sections on one slide)
+	%\tableofcontents[pausesections] % Output the table of contents (break sections up across separate slides)
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+%	PRESENTATION BODY SLIDES
+%----------------------------------------------------------------------------------------
+
+\section{Statistical Learning}
+\begin{frame}
+	\frametitle{A Definition}
+	\emph{Statistical Learning} is a set of tools for understanding data using statistical methods.
+	\pause
+	\vfill
+	Three levels:
+	\begin{enumerate}
+		\item \emph{Descriptive} statistics are a set of tools for describing a static data set.
+			\pause
+		\item \emph{Predictive} learning is a set of tools for predicting an outcome from historical data.
+			\pause
+		\item \emph{Prescriptive} analysis is a set of tools for prescribing a business action from data.
+	\end{enumerate}
+	\vfill
+\end{frame}
+
+\begin{frame}
+	\frametitle{Types of Variables}
+	\begin{enumerate}
+		\item \emph{Continuous} variables can take any value in a specified interval (e.g. $(0,1)$ or $(-\infty, \infty)$).
+			\pause
+			\vfill
+		\item \emph{Categorical} variables can take any value in a finite set (e.g. $\{A,B,C\}$ or $\{0,1\}$ or the set of all states in the U.S.).
+			\pause
+			\vfill
+		\item \emph{Ordinal} variables can take values in an ordered set (almost alway finite). E.g. how would you rate your pain on a scale of 1-10? How would you rate your service today?
+			\vfill
+	\end{enumerate}
+
+\end{frame}
+
+\begin{frame}
+	\frametitle{Supervised vs. Unsupervised Learning}
+	\begin{itemize}
+		\item \emph{Supervised} Learning is predictive with a set of historical data with given outcomes for each case. 
+			\vfill
+			\pause
+			\begin{itemize}
+				\item A \emph{regression} problem is when the outcome is a continuous variable.
+					\vfill
+					\pause
+				\item A \emph{classification} problem is when the outcome is a categorical variable.
+					\vfill
+					\pause
+				\item A \emph{ordinal regression} problem is when the outcome is ordinal.
+					\vfill
+					\pause
+			\end{itemize}
+		\item \emph{Unsupervised} Learning is a set of techniques that can be either descriptive or predictive but have no outcomes attached.
+			\vfill
+			\pause
+		\item \emph{Features} or \emph{Covariates} are variables in data sets that are not outcomes.
+	\end{itemize}
+\end{frame}
+
+\section{Estimating $f$}
+\begin{frame}
+	\frametitle{Basic Setup}
+	Let $Y$ be the output (also called a \emph{response} or \emph{target variable}).
+	\vfill
+	\pause
+	Let $X = (X_1, \ldots, X_d)$ be a vector of features (or covariates).
+	\vfill
+	\pause
+	Find a (computable mathematical) function $f$ such that 
+	\[Y = f(X) + \varepsilon\]
+	\vfill
+\end{frame}
+
+\begin{frame}
+	\frametitle{Parametric vs. Nonparametric}
+	Suppose $f$ takes the form:
+	\[ f(X) = \beta_0 + \beta_1*X_1 + \ldots + \beta_d * X_d \]
+	\pause
+	(This is just linear regression.)
+	\vfill
+	\pause
+	A \emph{parametric} model is a model where $f$ is chosen from a parameterized set of functions.
+	\vfill
+	\pause
+	A \emph{nonparametric} model is a model where $f$ is estimated directly from the data without a general closed form expression. 
+	\vfill
+\end{frame}
+
+\section{Tradeoffs}
+\begin{frame}
+	\frametitle{Accuracy versus Interpretability}
+	Consider a fancier model:
+	\[
+		f(X) = \sum_{\alpha | |\alpha| < n} \beta_\alpha * X^{\alpha}
+	\]
+	where $\alpha = (\alpha_1, \ldots, \alpha_d)$ is a multiindex and $|\alpha| = \alpha_1 + \cdots + \alpha_d$. (E.g. $f$ is a polynomial of degree $n$). 
+	\vfill
+	\pause
+	This is a much more \emph{flexible} model than linear regression, but also has many more parameteters. 
+	\vfill
+	\pause
+	Polynomials aren't usually well-suited for most modeling tasks but many supervised models use many more parameters (GAMs, trees, SVMs, neural networks). 
+	\vfill
+	\pause
+	High interpretability: fewer parameters, clearer relationships between input/output.
+	High accuracy: more parameters, tighter fitting functions
+\end{frame}
+
+\begin{frame}
+	\frametitle{Metrics}
+	Mean squared error:
+	\[
+		MSE = \frac{1}{n} \sum_{j=1}^N (y_j - f(\mathbf{x}_j))^2
+	\]
+	(Very widely used as a goodness-of-fit metric for regression problems.)
+	\vfill
+	\pause
+	Precision:
+	\[
+		P = \frac{TP}{TP + FP}
+	\]
+	\vfill
+	Recall:
+	\[
+		R = \frac{TP}{TP + FN}
+	\]
+\end{frame}
+
+\begin{frame}
+	\frametitle{Bias versus Variance}
+	For MSE:
+	\[ E(y_0 - f(\mathbf{x}_0))^2 = Var(f(\mathbf{x}_0)) + Bias(f(\mathbf{x}_0)) + Var(\varepsilon)\]
+	\vfill
+	\pause
+	The first term is the variance introduced by changing the \emph{training} set. If $f(\mathbf{x}_0)$ changes by large amounts by taking different samples of training data, it's high variance (usually a more flexible model). 
+
+	\vfill
+\end{frame}
+
+\end{document} 

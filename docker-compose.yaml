@@ -1,0 +1,12 @@
+services:
+  rstudio:
+    build:
+      context: .
+    image: local/rstudio:latest
+    ports:
+      - "8787:8787"
+    environment:
+      PASSWORD: 12345
+    volumes:
+      - ~/.rstudio_config:/home/rstudio/.config/rstudio
+      - ./classification/:/home/rstudio/

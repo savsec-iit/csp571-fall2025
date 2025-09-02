@@ -1,0 +1,117 @@
+---
+title: "LinearRegression"
+author: "Steve"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## An example
+
+```{r import, include=FALSE}
+library(MASS)
+library(ggplot2)
+library(tidyverse)
+library(broom)
+```
+
+The following data represents sales (in units) as a function of advertising budget (in thousands of dollars) for TV, radio, and newspaper. 
+
+
+```{r advertising}
+?read.csv
+Advertising <- read.csv('Advertising.csv', row.names=1)
+summary(Advertising)
+```
+
+
+Do we think there's a linear relationship between TV advertising and sales? I.e are there coefficients $\beta_0$ and $\beta_1$ such that $sales = \beta_0 + \beta_1*TV + \varepsilon$?
+
+```{r plot1}
+Advertising %>%
+  lm(sales ~ TV, data=.) %>%
+  augment() %>%
+  ggplot(mapping=aes(x=TV, y=sales)) + 
+  geom_point() + 
+  geom_smooth(method="lm", se=FALSE) + 
+  geom_segment(aes(xend=TV, yend=.fitted))
+```
+
+So here $$sales = \beta_0 + \beta_1*TV + \varepsilon.$$
+If $e_j = sales_j - \beta_0 - \beta_1*TV_j$, we call $e_j$ the *residual* of the linear model. We define the *residual sum of squares* by $$RSS = \sum_{j=1}^n e_j^2.$$
+
+In this one-variable case, we can write down a formula for $\beta_0$, $\beta_1$ (see page 62 of ISL), but such formulae become intractable when there is more than one feature. There is, however, a "simple" formula for computing linear regression coefficients if you're willing to deal with matrices.
+
+```{r coefficients}
+Advertising %>%
+  lm(sales ~ TV, data=.) %>%
+  summary()
+```
+
+What does all this mean? Well, easiest to explain is that $\beta_0 = 7.033$ and $\beta_1 = 0.048$ are the least-squares estimate of the coefficients. We can imagine that these are *estimates* of the *true* coefficients that relate TV advertising to sales. In the same way a sample mean $\hat{\mu}$ estimates a true mean $\mu$, we assume that $\beta_0$ and $\beta_1$ estimate the true coefficients. Analogously to the well-known formula $$Var(\hat{\mu}) = SE(\hat{\mu})^2 = \frac{\sigma^2}{n},$$ there formulae for the standard errors (page 66) for $\beta_0$ and $\beta_1$. 
+
+The estimate for $\sigma$ in this case is given by the *residual standard error*:
+$$RSE = \sqrt{\frac{RSS}{n-2}}$$. 
+
+We can use these standard errors to do hypothesis testing: Suppose we have a null hypothesis of $$H_0: \mbox{ $sales$ and $TV$ have no relationship}$$ or $$H_0: \beta_1 = 0$$ or the alternate hypothesis $$H_a: \beta_1 \neq 0$$. We can look at the t-statistic 
+$$ t = \frac{\beta_1}{SE(\beta_1)}$$ which in the case of our advertising data, chalks up to be about 17.67.
+
+The last column is a $p$-value. The $t$-statistic is known to have a $t$-distribution with n-2 degrees of freedom. For $n$ > 30, this is well-approximated by a normal distribution, so $p$-values of around 0.01 or 0.05 would correspond to $t$-statistics of 2.75 or 2 respectively. Therefore, we can reject the null hypothesis in this case and say that $\beta_1 \neq 0$. 
+
+### How good is this fit?
+
+The *total sum of squares*
+$$ TSS = \sum_{j=1}^n (y_j-\bar{y})^2$$ measures the total variance in the response. The $R^2$ statistic is defined by:
+$$R^2 = 1 - \frac{RSS}{TSS}$$. Intuitively, if RSS is small compared to TSS, most of the variance is explained by the linear model.
+
+
+## Multiple Features 
+
+We can likewise look at the models for $newspaper$ and $radio$:
+```{r coefficients2}
+Advertising %>%
+  lm(sales ~ newspaper, data=.) %>%
+  summary()
+```
+
+and
+
+```{r coefficients3}
+Advertising %>%
+  lm(sales ~ radio, data=.) -> model1
+summary(model1)
+```
+
+However, we might find it most effective to model sales using all three advertising modes combined:
+$$ sales = \beta_0 + \beta_1 * TV + \beta_2 * newspaper + \beta_3 * radio + \varepsilon$$
+
+```{r coefficients_full}
+Advertising %>%
+  lm(sales ~ TV+newspaper +radio, data=.) -> model1
+summary(model1)
+```
+
+Notice that when $newspaper$ is the lone feature, it's very likely that the newspaper coefficient is non-zero, but here, it's very likely to be zero. This is due to radio and newspaper having very strong *confounding* effects. As per the classic example: If we look at ice cream sales and shark attacks on a given beach, they're likely to have a strong linear relationship, but ice cream sales doesn't *cause* shark attacks. There are more people at the beach when it's hot. 
+
+Here the *correct* hypotheses are:
+$$H_0: \beta_1 = \beta_2 = \ldots = \beta_p = 0$$
+and $$H_a: \beta_j \neq 0 \mbox{ for some $j$}.$$
+
+### The F-statistic
+
+The $F$-statistic is given by:
+$$ F = \frac{(TSS - RSS)/p}{RSS/(n - p - 1)} $$.
+
+The expectation of the denominator is $\sigma^2$. Under the null hypothesis, the expectation of the numerator is also $\sigma^2$. Hence, if $F$ is close to 1, we accept the null hypothesis and reject otherwise. 
+
+## Interaction terms
+It might be that spending *only* on TV or radio does not optimize sales and that investing in both has a synergistic effect. 
+
+```{r coefficients_interaction}
+Advertising %>%
+  lm(sales ~ TV + radio + TV*radio, data=.) %>%
+  summary()
+```
