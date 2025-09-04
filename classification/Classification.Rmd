@@ -1,0 +1,199 @@
+---
+title: "Classification"
+author: "Steve"
+date: "`r Sys.Date()`"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+```{r import, include=FALSE}
+library(tidyverse)
+library(ggplot2)
+library(broom)
+library(palmerpenguins)
+library(nnet)
+library(MASS)
+```
+
+## The Plan
+
+- Overview
+- Logistic Regression
+- Bayes' Theorem
+- LDA
+- Naive Bayes
+
+## Classification
+
+- Recall that a "classification" model is a supervised model where the response variable is *categorical*. 
+  - Fraud detection
+  - Disease diagnosis
+  - Species identification 
+
+## An Example
+
+```{r penguin_plot, echo=FALSE, warning=FALSE, fig.width=7, fig.height=5} 
+ggplot(data=penguins, 
+       mapping=aes(x=species,
+                   y=flipper_length_mm,
+                   fill=species)) + 
+  geom_boxplot() + 
+  labs(x="Species", y="Flipper Length (mm)")
+```
+
+## Body Mass Plot
+
+```{r penguin_plot2, echo=FALSE, warning=FALSE, fig.width=7, fig.height=5} 
+ggplot(data=penguins, 
+       mapping=aes(x=species, 
+                   y=body_mass_g,
+                   fill=species)) + 
+  geom_boxplot()+
+  labs(x="Species", y="Body Mass (g)")
+```
+
+
+## Logistic Regression {.smaller}
+
+Let $p_y(X) = Pr(Y=y|X)$ where $y$ could be any of the values in "species".
+
+Suppose $$p_y(X) = \frac{e^{\beta_{y0} + \beta_{y1}x_1 + \cdots \beta_{yp}x_p}}{1 + \sum_{l=1}^{K-1} e^{\beta_{l0} + \beta_{l1}x_1 + \cdots \beta_{lp}x_p}}$$
+and then $$p_K(X) = \frac{1}{1 + \sum_{l=1}^{K-1} e^{\beta_{l0} + \beta_{l1}x_1 + \cdots \beta_{lp}x_p}}$$
+Using some high school math, we can see that
+$$\log(\frac{p_y(X)}{p_K(X)}) = \beta_{y0} + \beta_{y1}x_1 + \cdots + \beta_{yp}x_p$$
+
+## Maximum Likelihood
+
+The *likelihood* function
+
+$$ l(\mathbf{\beta}) = \prod_{i: y_i =1} p(x_i) \prod_{i: y_i = 0} (1 - p(x_i))$$
+
+The *maximum likelihood* is the set of parameters $\beta$ that maximize this likelihood function.
+
+## With the Penguin Data {.smaller}
+
+```{r penguin_log_reg, echo=FALSE, warning=FALSE}
+logreg <- multinom(formula = species ~ flipper_length_mm + body_mass_g,
+              family = "multinomial",
+              data=penguins)
+summary(logreg)
+
+```
+
+## Multinomial Logistic Regression Tests
+
+Standard Errors
+```{r logreg_tests}
+z <- summary(logreg)$coefficients/summary(logreg)$standard.errors
+z
+```
+
+Z-Test
+
+```{r logreg_tests2}
+p <- (1 - pnorm(abs(z), 0, 1)) * 2
+p
+```
+
+
+## Predicted Probabilities
+
+```{r logreg_predicted_probs, echo=TRUE}
+pp <- fitted(logreg)
+head(pp)
+```
+
+
+## Adding a Factor
+
+```{r logreg2}
+logreg2 <- multinom(formula = species ~ flipper_length_mm + body_mass_g + factor(island),
+              family = "multinomial",
+              data=penguins)
+summary(logreg2)
+```
+
+## Model Tests
+
+Standard Errors
+```{r logreg2_tests}
+z <- summary(logreg2)$coefficients/summary(logreg2)$standard.errors
+z
+```
+
+Z-test
+
+```{r logreg2_tests2}
+p <- (1 - pnorm(abs(z), 0, 1)) * 2
+p
+```
+
+
+## Predicted Probabilities
+
+```{r logreg2_predicted_probs, echo=TRUE}
+pp <- fitted(logreg2)
+tail(pp)
+```
+
+## Bayes Theorem
+
+$$P(A | B) = \frac{P(B|A)P(A)}{P(B)} = \frac{P(B|A)P(A)}{P(B|A)P(A) + P(B|A^c)P(A^c)}$$
+
+Example:
+
+Suppose a Really Bad Disease (RBD) occurs in $10^{-6}$ patients. There is a test for RBD that is 99% effective (which we will take to mean that there are 1% false positives and 1% false negatives). If a patient tests positive for RBD, what's the probability that they have the disease?
+
+
+## Linear Discriminant Analysis (LDA) {.smaller}
+
+Using Bayes' to estimate $$P(Y=k|X=x) = \frac{P(X=x|Y=k)P(Y=k)}{P(X=x)}$$ (notice the denominator does *not* depend on $k$). 
+
+LDA assumes data from *all* classes comes from a multivariate normal distribution with a common covariance:
+
+$$p(X=x | Y=k) = \frac{1}{(2\pi)^{p/2}|\Sigma|^{1/2}} e^{-\frac{1}{2}(x - \mu_k)^T \Sigma^{-1}(x-\mu_k)}$$
+
+Or the log form:
+
+$$ \delta_k(x) = x^T \Sigma^{-1} \mu_k + \mu_k \Sigma^{-1} \mu_k + \log(\pi_k)$$
+
+The k for which $\delta_k(x)$ is largest is the class label for $x$. 
+
+## Fitting LDA
+
+One can empirically set $$\mu_k = \frac{1}{N_k}\sum_{i: y_i=k} x_i$$
+
+and 
+
+$$ \Sigma = \frac{1}{N - K}\sum_{k=1}^K \sum_{i:y_i=k} (x_i - \mu_i)^T(x_i - \mu_i)$$
+
+and
+
+$$\pi_k = \frac{N_K}{N}$$
+
+## Naive Bayes
+
+Naive Bayes is *similar* to LDA, but the distributions
+$$f_k(x) := p(X=x|Y=k)$$
+
+Are assumed to be independent, so
+$$
+f_k(x) = \prod_{j=1}^p f_{k,j}(x_j)
+$$
+
+These one-dimensional distributions can be estimated using *Kernel Density Estimation*(KDE)
+
+## KDE
+
+Choose a one-dimensional distribution:
+
+1. Uniform
+2. Normal
+3. Semicircular
+4. ...
+
+$$f(x) = \frac{1}{N*h} \sum_{j=1}^N f(\frac{x}{h})$$
